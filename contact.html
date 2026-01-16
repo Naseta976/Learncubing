@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - SpeedCubing Tips</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        button, input[type="submit"] {
+            display: inline-block;
+            background: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            margin: 20px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover, input[type="submit"]:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            min-height: 500px;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .main-content h1 {
+            color: #6a11cb;
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+
+        .main-content p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+        }
+
+        /* Formulaire de contact */
+        #contactForm {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        #contactForm label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+
+        #contactForm input,
+        #contactForm textarea,
+        #contactForm select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #contactForm input:focus,
+        #contactForm textarea:focus,
+        #contactForm select:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        #contactForm textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        #contactForm button[type="submit"] {
+            display: block;
+            margin: 30px auto 0;
+            width: 200px;
+        }
+
+        /* Messages de statut */
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Messages d'erreur sous les champs */
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-field {
+            border-color: #dc3545 !important;
+        }
+
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            #contactForm {
+                padding: 20px;
+            }
+
+            .instructions {
+                padding: 15px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <div class="container">
+        <div class="main-content">
+            <h1>Contactez-nous</h1>
+            <p>Vous avez des questions sur le speedcubing ? Besoin de conseils ? Écrivez-nous et nous vous répondrons dans les plus brefs délais !</p>
+            
+            <div id="statusMessage" class="message" style="display: none;"></div>
+            
+            <form id="contactForm">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" required placeholder="Votre nom">
+                <div id="nameError" class="error-message"></div>
+                
+                <label for="email">Votre Email :</label>
+                <input type="email" id="email" name="email" required placeholder="votre@email.com">
+                <div id="emailError" class="error-message"></div>
+                
+                <label for="subject">Objet du message :</label>
+                <select id="subject" name="subject" required>
+                    <option value="" disabled selected>Sélectionnez un sujet</option>
+                    <option value="question">Question sur le speedcubing</option>
+                    <option value="conseil">Conseil pour améliorer mes temps</option>
+                    <option value="méthode">Question sur une méthode</option>
+                    <option value="cube">Recommandation de cube</option>
+                    <option value="partenariat">Proposition de partenariat</option>
+                    <option value="autre">Autre sujet</option>
+                </select>
+                <div id="subjectError" class="error-message"></div>
+                
+                <label for="message">Message :</label>
+                <textarea id="message" name="message" required placeholder="Votre message..."></textarea>
+                <div id="messageError" class="error-message"></div>
+                
+                <button type="submit">Envoyer le message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Inclure EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script>
+        // 1. Public Key (Account > API Keys dans EmailJS)
+        emailjs.init("btS5FjNHSVc4P3CzC");
+        
+        // 2. Service ID (Email Services dans EmailJS)
+        const SERVICE_ID = "service_cfrkgtw";
+        
+        // 3. Template ID (Email Templates dans EmailJS)
+        const TEMPLATE_ID = "template_9pf5wsi";
+        
+        // 4. Votre adresse email où recevoir les messages
+        const YOUR_EMAIL = "learncubing@gmail.com";
+        
+        // ============================================
+        // LOGIQUE DU FORMULAIRE
+        // ============================================
+        
+        // Menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mainNav.style.display = 'none';
+                }
+            });
+        });
+
+        // Fonctions pour gérer les messages
+        function showMessage(text, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = text;
+            statusMessage.className = 'message ' + type;
+            statusMessage.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('statusMessage').style.display = 'none';
+        }
+
+        // Fonctions de validation
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            
+            field.classList.add('error-field');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function clearError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            
+            field.classList.remove('error-field');
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+        }
+
+        // Validation d'email avec vérification DNS (simple)
+        function isValidEmail(email) {
+            // Expression régulière pour validation basique
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                return false;
+            }
+            
+            // Vérification supplémentaire pour les domaines communs
+            const commonDomains = [
+                'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com',
+                'icloud.com', 'protonmail.com', 'aol.com', 'zoho.com',
+                'mail.com', 'yandex.com', 'gmx.com'
+            ];
+            
+            const domain = email.split('@')[1].toLowerCase();
+            
+            // Vérifier si le domaine a un point (ex: gmail.com)
+            if (!domain.includes('.')) {
+                return false;
+            }
+            
+            // Vérifier la longueur du domaine
+            if (domain.length < 4) {
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Validation du nom
+        function isValidName(name) {
+            return name.length >= 2 && name.length <= 50 && /^[a-zA-ZÀ-ÿ\s\-']+$/.test(name);
+        }
+
+        // Validation du message
+        function isValidMessage(message) {
+            return message.length >= 10 && message.length <= 2000;
+        }
+
+        // Validation du sujet
+        function isValidSubject(subject) {
+            return subject !== "" && subject !== null;
+        }
+
+        // Vérifier si EmailJS est configuré
+        function isEmailJSConfigured() {
+            if (!SERVICE_ID || SERVICE_ID === "VOTRE_SERVICE_ID_ICI" ||
+                !TEMPLATE_ID || TEMPLATE_ID === "VOTRE_TEMPLATE_ID_ICI") {
+                return false;
+            }
+            return true;
+        }
+
+        // Validation en temps réel
+        document.getElementById('name').addEventListener('blur', function() {
+            const name = this.value.trim();
+            if (name && !isValidName(name)) {
+                showError('name', 'Le nom doit contenir entre 2 et 50 caractères (lettres et espaces seulement)');
+            } else {
+                clearError('name');
+            }
+        });
+
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && !isValidEmail(email)) {
+                showError('email', 'Veuillez entrer une adresse email valide');
+            } else {
+                clearError('email');
+            }
+        });
+
+        document.getElementById('subject').addEventListener('change', function() {
+            if (!isValidSubject(this.value)) {
+                showError('subject', 'Veuillez sélectionner un sujet');
+            } else {
+                clearError('subject');
+            }
+        });
+
+        document.getElementById('message').addEventListener('blur', function() {
+            const message = this.value.trim();
+            if (message && !isValidMessage(message)) {
+                showError('message', 'Le message doit contenir entre 10 et 2000 caractères');
+            } else {
+                clearError('message');
+            }
+        });
+
+        // Traduction des sujets pour l'email
+        function getSubjectText(subjectValue) {
+            const subjects = {
+                'question': 'Question sur le speedcubing',
+                'conseil': 'Conseil pour améliorer mes temps',
+                'méthode': 'Question sur une méthode',
+                'cube': 'Recommandation de cube',
+                'partenariat': 'Proposition de partenariat',
+                'autre': 'Autre sujet'
+            };
+            return subjects[subjectValue] || subjectValue;
+        }
+
+        // Gestion du formulaire
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Réinitialiser les erreurs
+            clearError('name');
+            clearError('email');
+            clearError('subject');
+            clearError('message');
+            
+            // Vérifier la configuration EmailJS
+            if (!isEmailJSConfigured()) {
+                showMessage("❌ EmailJS n'est pas configuré. Suivez les instructions ci-dessous.", "error");
+                return;
+            }
+            
+            // Récupérer les valeurs
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            
+            // Validation des champs
+            let isValid = true;
+            
+            if (!name) {
+                showError('name', 'Le nom est requis');
+                isValid = false;
+            } else if (!isValidName(name)) {
+                showError('name', 'Le nom doit contenir entre 2 et 50 caractères (lettres et espaces seulement)');
+                isValid = false;
+            }
+            
+            if (!email) {
+                showError('email', 'L\'email est requis');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showError('email', 'Veuillez entrer une adresse email valide');
+                isValid = false;
+            }
+            
+            if (!isValidSubject(subject)) {
+                showError('subject', 'Veuillez sélectionner un sujet');
+                isValid = false;
+            }
+            
+            if (!message) {
+                showError('message', 'Le message est requis');
+                isValid = false;
+            } else if (!isValidMessage(message)) {
+                showError('message', 'Le message doit contenir entre 10 et 2000 caractères');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                showMessage("❌ Veuillez corriger les erreurs dans le formulaire", "error");
+                return;
+            }
+            
+            // Afficher chargement
+            showMessage("📧 Envoi en cours...", "loading");
+            
+            // Préparer les données
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                subject: getSubjectText(subject),
+                subject_value: subject,
+                message: message,
+                to_email: YOUR_EMAIL,
+                reply_to: email,
+                date: new Date().toLocaleString('fr-FR'),
+                ip_address: 'Non disponible' // Pourrait être récupéré via une API
+            };
+            
+            // Envoyer l'email
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                .then(function(response) {
+                    showMessage("✅ Message envoyé avec succès ! Nous vous répondrons bientôt.", "success");
+                    document.getElementById('contactForm').reset();
+                    
+                    // Cacher le message après 5 secondes
+                    setTimeout(() => {
+                        hideMessage();
+                    }, 5000);
+                }, function(error) {
+                    console.error('Erreur EmailJS:', error);
+                    showMessage("❌ Erreur lors de l'envoi. Veuillez réessayer.", "error");
+                });
+        });
+
+        // Validation supplémentaire pour l'email
+        function validateEmailWithAPI(email) {
+            // Note: Cette fonction nécessite une API externe
+            // Vous pouvez utiliser une API comme Mailboxlayer, AbstractAPI, etc.
+            // Exemple avec fetch (à configurer avec votre clé API)
+            return fetch(`https://api.emailvalidation.io/v1/info?email=${encodeURIComponent(email)}&apikey=VOTRE_CLE_API`)
+                .then(response => response.json())
+                .then(data => {
+                    return data.format_valid && data.mx_found && data.smtp_check;
+                })
+                .catch(() => {
+                    // En cas d'erreur, on utilise la validation basique
+                    return isValidEmail(email);
+                });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth <= 768) {
+                mainNav.style.display = 'none';
+            }
+            
+            // Vérifier la configuration
+            if (!isEmailJSConfigured()) {
+                showMessage("⚠️ Configurez EmailJS pour activer le formulaire", "error");
+            }
+        });
+    </script>
+</body>
+</html>

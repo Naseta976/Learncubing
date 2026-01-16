@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méthode CFOP - SpeedCubing Tips</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1601299200211-6af095b1a0c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 1175px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* Table des matières */
+        .toc {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #2575fc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #6a11cb;
+            text-decoration: underline;
+        }
+        
+
+        /* Main Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Sections */
+        h2 {
+            color: #6a11cb;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>La Méthode CFOP</h1>
+            <p>La méthode CFOP (Cross, F2L, OLL, PLL) est la méthode de résolution la plus populaire parmi les speedcubers. Elle se compose de quatre étapes principales : la formation d'une croix (Cross), la résolution des deux premières couches (F2L), l'orientation des dernières couches (OLL) et la permutation des dernières couches (PLL).</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="container-grid">
+            <main class="main-content fade-in">               
+                <h2><strong>1.</strong><a href="Cross.html"> Cross (Croix)</a></h2>
+                <p>La première étape de la méthode CFOP consiste à former une croix sur une face du cube, en alignant les arêtes avec les centres correspondants.</p>
+                <p>Cette étape est similaire à celle de la méthode simple, mais cette dernière est résolue en bas et non en haut pour un gain de temps sur l’étape suivante F2L. Nous évoquerons dans ce tutoriel un peu plus de théorie sur sa résolution.</p>
+                <img src="assets\Cross.svg" width="150">
+                               
+                <h2><strong>2.</strong><a href="F2L.html"> F2L (First Two Layers - Premières Deux Couches)</a></h2>
+                <p>Cette étape consiste à résoudre les deux premières couches du cube en insérant des paires de coins et d'arêtes simultanément.</p>
+                <p>Cette étape est la plus longue de la méthode CFOP, mais aussi la plus efficace en termes de nombre de mouvements. Elle consiste à insérer des paires de coins et d'arêtes simultanément dans les deux premières couches du cube.</p>
+                <img src="assets\F2L.svg" width="150">
+                
+                <h2><strong>3.</strong><a href="OLL.html"> OLL (Orientation of the Last Layer - Orientation de la Dernière Couche)</a></h2>
+                <p>Cette étape vise à orienter toutes les pièces de la dernière couche du cube afin qu'elles soient correctement positionnées, sans se soucier de leur emplacement final.</p>
+                <p>Il existe 57 algorithmes OLL différents, chacun correspondant à une configuration spécifique de la dernière couche. Apprendre tous ces algorithmes peut sembler intimidant, mais cela permet de gagner un temps précieux lors de la résolution du cube.</p>
+                <img src="assets\OLL.svg" width="150">
+
+                <h2><strong>4.</strong> <a href="PLL.html">PLL (Permutation of the Last Layer - Permutation de la Dernière Couche)</a></h2>
+                <p>Cette étape finale consiste à permuter les pièces de la dernière couche pour les placer dans leur position correcte, complétant ainsi la résolution du cube.</p>
+                <p>Il existe 21 algorithmes PLL différents, chacun correspondant à une configuration spécifique de la dernière couche. Maîtriser ces algorithmes est essentiel pour devenir un speedcuber efficace.</p>
+                <img src="assets\PLL.svg" width="150">
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">         
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mainNav.style.display = 'none';
+                }
+            });
+        });
+
+        // Navigation active
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            const scrollPosition = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

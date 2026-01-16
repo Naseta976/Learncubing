@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F2L (First Two Layers - Premières Deux Couches) - SpeedCubing Tips</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1601299200211-6af095b1a0c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 1000px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Contenu principal */
+        .recap {
+            margin-bottom: 40px;
+        }
+        
+        .recap h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            font-size: 40px;
+        }
+
+        .recap h3 {
+            color: #6711c9;
+            margin-bottom: 15px;
+            font-size: 30px;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 15px;
+        }
+
+        .recap p {
+            color: #666;
+            max-width: 1300px;
+            
+            font-size: 18px;
+        }
+
+        .recap li {
+            color: #3608b3;
+            font-size: 19px;
+        }
+
+        .widget {
+            margin-bottom: 30px;
+        }
+
+        .widget h3 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 35px;
+            padding-bottom: 15px;
+        }
+        .widget h4 {
+            color: #6711c9;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 15px;
+        }
+        .widget h5 {
+            color: #1724d1;
+            font-size: 20px;
+            padding-bottom: 15px;
+        }
+        .cube-type p {
+            color: #3608b3;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links a {
+            color: #6a11cb;
+            text-decoration: none;
+            padding: 8px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .quick-links a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cube-types {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .cube-type {
+            background: #eeebeb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .cube-type:hover {
+            transform: translateY(-5px);
+        }
+
+        .cube-type .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            margin: 20px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>F2L (First Two Layers - Premières Deux Couches)</h1>
+            <p>Les F2L consistent à former des paires et les mettre en position en 1 seul temps pour former les 2 premières couches.</p>
+        </div>
+    </section>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <a href="Cross.html" class="cta-button">Repasser à l'étape précédente:  Cross (Croix)</a>
+        <div class="recap">
+            <h2>Etape 2 : Résolution des 2 premières couches</h2>
+            <h3>Théorie des « F2L »</h3>
+            <p>Les F2L sont la seconde étape de la méthode CFOP et représente environ 2/3 du temps de résolution du cube.</p>
+            <p>Le principe des F2L est simple et consiste en 2 pseudo-étapes qui sont :</p>
+            <li>L’association ou le couplage des coins et arêtes correspondants pour former une « paire »</li>
+            <li>l’insertion de la « paire » ou « couple » dans son emplacement (slot en anglais) (soit dans sa position de résolution).</li>
+            <p>Les F2L consistent à former une paire coin + arête puis à l’insérer directement à sa place, le tout en une seule séquence, afin de compléter les deux premières couches du Rubik’s Cube.</p>
+        </div>
+
+        <div class="widget">
+            <h3>F2L</h3>
+            <h4>Vous trouverez ci-dessous la liste des cas correspondant au «F2L» : </h4>
+            <h5>Insertions simples</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_1.svg" width="120">
+                    <p><div>U (R U' R')</div></p>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_2.svg" width="120">
+                    <div>y U' (L' U L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_3.svg" width="120">
+                    <div>y (L' U' L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_4.svg" width="120">
+                    <div>(R U R')</div>
+                </div>
+            </div>
+            <h5>F2L Cas 1</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_5.svg" width="120">
+                    <div>U (L' U' L U') (L' U' L)</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_6.svg" width="120">
+                    <div>U' (R U R' U) (R U R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_7.svg" width="120">
+                    <div>L U2 L2 U' L2 U' L'</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_8.svg" width="120">
+                    <div>	R' U2' R2 U R2' U R</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_9.svg" width="120">
+                    <div>U (L' U L U') (L' U' L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_10.svg" width="120">
+                    <div>U' (R U' R' U) (R U R')</div>
+                </div>
+            </div>
+            <h5>F2L Cas 2</h5>
+            <div class="cube-types">
+                
+                <div class="cube-type">
+                    <img src="assets\F2L_11.svg" width="120">
+                    <div>(U' R U R') U2 (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_12.svg" width="120">
+                    <div>(U L' U' L ) U2 (L' U L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_13.svg" width="120">
+                    <div>U' (R U2' R') U2 (R U' R')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_14.svg" width="120">
+                    <div>(U L' U2 L ) U2 (L' U L)</div>
+                </div>
+            </div>
+            <h5>F2L Cas 3</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_15.svg" width="120">
+                    <div>U (R U2 R') U (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_16.svg" width="120">
+                    <div>U' (L' U2 L) U' (L' U L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_17.svg" width="120">
+                    <div>F R U2 R' F'</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_18.svg" width="120">
+                    <div>F' L' U2 L F</div>
+                </div>
+            </div>
+            <h5>Coin et arrête non connetés correctement</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_19.svg" width="120">
+                    <div>(R U R') U2 (R U' R' U) (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_20.svg" width="120">
+                    <div>U F (R U R' U') F' (U R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_21.svg" width="120">
+                    <div>(R U2 R') U' (R U R')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_22.svg" width="120">
+                    <div>(L' U2 L) U (L' U' L)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_23.svg" width="120">
+                    <div>U2 R2 U2 (R' U' R U') R2</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_24.svg" width="120">
+                    <div>U2 L2 U2 (L U L' U)</div>
+                </div>
+            </div>
+            <h5>Coin en place et arrête en face supérieure</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_25.svg" width="120">
+                    <div>U'L'U L U F U'F'</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_26.svg" width="120">
+                    <div>U R U' R' U' F' U F</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_27.svg" width="120">
+                    <div>(R U' R' U) (R U' R')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_28.svg" width="120">
+                    <div>(R U' R') U2 (F' U F)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_29.svg" width="120">
+                    <div>(R' F R F') U (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_30.svg" width="120">
+                    <div>(R U R' U') (R U R')</div>
+                </div>
+            </div>
+            <h5>Arrête en place et coin en face supérieure</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_31.svg" width="120">
+                    <div>U' (R' F R F') (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_32.svg" width="120">
+                    <div>(U R U' R') (U R U' R') (U R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_33.svg" width="120">
+                    <div>(U' R U' R') U2 (R U' R')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_34.svg" width="120">
+                    <div>	U (R U R') U2 (R U R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_35.svg" width="120">
+                    <div>U2 (R U' R') U' (F' U' F)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_36.svg" width="120">
+                    <div>	U (F' U' F) U' (R U R')</div>
+                </div>
+            </div>
+            <h5>Coin et arrête en place</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets\F2L_37.svg" width="120">
+                    <div>Cas résolue</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_38.svg" width="120">
+                    <div>(R U' R') Dw (R' U2 R) U2' (R' U R)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_39.svg" width="120">
+                    <div>(R U' R' U') R U R' U2 (R U' R')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets\F2L_40.svg" width="120">
+                    <div>(R U' R' U) (R U2' R') U (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_41.svg" width="120">
+                    <div>(F' U F) U2 (R U R' U) (R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets\F2L_42.svg" width="120">
+                    <div>(R U R' U')(R U' R') U2 (F' U' F)</div>
+                </div>
+            </div>
+        </div>
+        <h3>En conclusion, Si le principe est simple, sa mise en application est beaucoup difficile. Il existe des cas très compliqués parmi les 42 cas rencontrés. Il y a en théorie 41 algorithmes à mémoriser pour résoudre tous les cas (le dernier cas étant le stade résolu).</h3>
+        <h3>Pour utiliser les F2L, il faut les comprendre, et ne pas les apprendre !</h3>
+        <a href="OLL.html" class="cta-button">Passer à l'étape suivante: OLL (Orientation of the Last Layer - Orientation de la Dernière Couche)</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">              
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mainNav.style.display = 'none';
+                }
+            });
+        });
+
+        // Navigation active
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            const scrollPosition = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Effet de survol pour les cartes
+        document.querySelectorAll('.cube-type').forEach(cube => {
+            cube.addEventListener('mouseenter', () => {
+                cube.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            });
+            
+            cube.addEventListener('mouseleave', () => {
+                cube.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLL (Permutation of the Last Layer - Permutation de la Dernière Couche) - SpeedCubing Tips</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1601299200211-6af095b1a0c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 1000px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Contenu principal */
+        .recap {
+            margin-bottom: 40px;
+        }
+        
+        .recap h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            font-size: 40px;
+        }
+
+        .recap h3 {
+            color: #6711c9;
+            margin-bottom: 15px;
+            font-size: 30px;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 15px;
+        }
+
+        .recap p {
+            color: #666;
+            max-width: 1300px;
+            
+            font-size: 18px;
+        }
+
+        .recap li {
+            color: #3608b3;
+            font-size: 19px;
+        }
+
+        .widget {
+            margin-bottom: 30px;
+        }
+
+        .widget h3 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 35px;
+            padding-bottom: 15px;
+        }
+        .widget h4 {
+            color: #6711c9;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 15px;
+        }
+        .widget h5 {
+            color: #1724d1;
+            font-size: 20px;
+            padding-bottom: 15px;
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links a {
+            color: #6a11cb;
+            text-decoration: none;
+            padding: 8px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .quick-links a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cube-types {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .cube-type {
+            background: #eeebeb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .cube-type:hover {
+            transform: translateY(-5px);
+        }
+
+        .cube-type .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>PLL (Permutation of the Last Layer - Permutation de la Dernière Couche)</h1>
+            <p>Cette étape finale consiste à permuter les pièces de la dernière couche du cube pour les placer dans leur position finale. Il existe 21 algorithmes PLL différents pour accomplir cette tâche.</p>
+        </div>
+    </section>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <a href="OLL.html" class="cta-button">Repasser à l'étape précédente: OLL (Orientation of the Last Layer - Orientation de la Dernière Couche)</a>
+        <div class="recap">
+            <h2>Etape 4 : Permutation de la dernière couche</h2>
+            <h3>Que sont les « PLL »?</h3>
+            <p>Les PLL constituent la quatrième et dernière étape de la méthode CFOP pour résoudre un Rubik’s Cube.</p>
+            <p>Cette étape consiste à permuter les coins et les arêtes de la dernière couche afin d’achever la résolution en une seule phase.</p>
+            <p>On compte 21 algorithmes PLL, qu’il est nécessaire de mémoriser, tout comme les OLL, pour optimiser la rapidité et l’efficacité de la méthode.</p>
+        </div>
+
+        <div class="widget">
+            <h3>Full PLL</h3>
+            <h4>Vous trouverez ci-dessous la liste des cas correspondant au «Full PLL» : </h4>
+            <h5>Permutations des arrêtes ou des coins seulement</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets/PLL_1.svg" width="120">
+                    <div>R2 U (R U R' U')(R' U')(R' U R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_2.svg" width="120">
+                    <div>(R U')(R U)(R U)(R U') R' U' R2</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_3.svg" width="120">
+                    <div>M2 U M2 U M' U2 M2 U2 M' U2</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_4.svg" width="120">
+                    <div>M2 U M2 U2 M2 U M2</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_5.svg" width="120">
+                    <div>x [(R' U R') D2][(R U' R') D2] R2</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets/PLL_6.svg" width="120">
+                    <div>x' [(R U' R) D2][(R' U R) D2] R2</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_7.svg" width="120">
+                    <div>x'[(R U' R') D (R U R')] D' [(R U R') D (R U' R')] D'</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets/PLL_8.svg" width="120">
+                    <div>Résolu</div>
+                </div>
+            </div>
+            <h5>Permutation deux coins adjacents</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets/PLL_9.svg" width="120">
+                    <div>(L U2' L' U2')(L F')(L' U' L U)(L F) L2' U</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_10.svg" width="120">
+                    <div>(R' U2 R U2)(R' F)(R U R' U')(R' F') R2 U'</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_11.svg" width="120">
+                    <div>(R' U L')(U2 R U' R' U2)(R L U')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_12.svg" width="120">
+                    <div>(R U R' F')[(R U R' U')(R' F)(R2 U' R') U']</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_13.svg" width="120">
+                    <div>(R U R' U')(R' F)(R2 U' R') U' (R U R' F')</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets/PLL_14.svg" width="120">
+                    <div>R' U' F' (R U R' U') R' F R2 U' R' U' R U R' U R</div>
+                </div>
+            </div>
+            <h5>Permutation deux coins en diagonale</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets/PLL_15.svg" width="120">
+                    <div>(R' U R' Dw')(R' F')(R2 U' R' U)(R' F R F)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_16.svg" width="120">
+                    <div>F R U' R' U' (R U R' F')[(R U R' U')(R' F R F')]</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_17.svg" width="120">
+                    <div>[(L U' R) U2 (L' U R')][(L U' R) U2 (L' U R')] U</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_18.svg" width="120">
+                    <div>[(R' U L') U2 (R U' L)][(R' U L') U2 (R U' L)] U'</div>
+                </div>
+            </div>
+            <h5>Double rotation</h5>
+            <div class="cube-types">
+                <div class="cube-type">
+                    <img src="assets/PLL_19.svg" width="120">
+                    <div>R2 Uw R' U R' U' R Uw' R2 (y' R' U R)</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_20.svg" width="120">
+                    <div>R2 Uw' R U' R U R' Uw R2 (y R U' R')</div>
+                </div>
+                <div class="cube-type">
+                    <img src="assets/PLL_21.svg" width="120">
+                    <div>(R U R') y' R2 Uw' R U' R' U R' Uw R2</div>
+                </div>
+                <div class="cube-type"> 
+                    <img src="assets/PLL_22.svg" width="120">
+                    <div>(R' U' R) y R2 Uw R' U R U' R Uw' R2</div>
+                </div>
+            </div>
+        </div>
+        <h3>En conclusion, la phase PLL représente l’ultime étape de la méthode CFOP et joue un rôle essentiel dans la résolution rapide du Rubik’s Cube. En apprenant et en maîtrisant les 21 algorithmes dédiés, il devient possible de permuter efficacement les pièces de la dernière couche en un seul enchaînement. Cette connaissance permet non seulement de gagner en vitesse, mais aussi d’assurer une finition fluide et cohérente de la résolution.</h3>
+        <a href="index.html" class="cta-button">Retourner à l'acceuil</a><a href="methode.html" class="cta-button">Changer de méthode</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">              
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mainNav.style.display = 'none';
+                }
+            });
+        });
+
+        // Navigation active
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            const scrollPosition = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Effet de survol pour les cartes
+        document.querySelectorAll('.cube-type').forEach(cube => {
+            cube.addEventListener('mouseenter', () => {
+                cube.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            });
+            
+            cube.addEventListener('mouseleave', () => {
+                cube.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
