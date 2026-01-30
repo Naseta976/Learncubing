@@ -1,34 +1,348 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>Rubik's Cube 3D</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/src/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's 3D - SpeedCubing Tips</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        button {
+            display: inline-block;
+            background: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            margin: 20px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            min-height: 500px;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .main-content h1 {
+            color: #6a11cb;
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+
+        /* Layout: controls left, preview right */
+        .ui {
+            display: block;
+        }
+        .ui-grid {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            justify-content: center;
+            margin-top: 12px;
+        }
+        .controls {
+            width: 240px;
+            min-width: 180px;
+        }
+        .controls .row { display:flex; gap:12px; margin-bottom:12px; justify-content:flex-start; }
+        .controls button { flex:1; }
+
+        .preview { flex:1; display:flex; justify-content:center; }
+
+        /* Rubik 3D container */
+        #rubik-container {
+            width: 100%;
+            max-width: 600px;
+            height: 420px;
+            border-radius: 12px;
+            background: linear-gradient(180deg,#fff8e1,#fff3c2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        @media (max-width:768px){
+            .ui-grid { flex-direction:column; }
+            #rubik-container{height:320px;max-width:100%;}
+        }
+
+        /* error fallback */
+        .rubik-error {
+            color: #7a1b1b;
+            background: #fff2f0;
+            border: 1px solid #f5c6cb;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px;
+            text-align: center;
+        }
+
+        .main-content p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+        }
+        .ui h3 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            #contactForm {
+                padding: 20px;
+            }
+
+            .instructions {
+                padding: 15px;
+                margin: 20px auto;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="container"></div>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="Rubik's.html">Rubik's 3D</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <div class="ui">
+        <div class="ui-grid">
+            <div class="controls">
+                <h3>Contrôles 🎯</h3>
 
-  <div class="ui">
-    <h3>Contrôles 🎯</h3>
-    <div class="row">
-      <button id="btnU">U</button>
-      <button id="btnR">R</button>
-      <button id="btnF">F</button>
-    </div>
-    <div class="row">
-      <button id="btnD">D</button>
-      <button id="btnL">L</button>
-      <button id="btnB">B</button>
-    </div>
-    <div class="row">
-      <button id="btnScramble">🔀 Scramble</button>
-      <button id="btnReset">↺ Reset</button>
-    </div>
-  </div>
+                <div class="row">
+                    <button id="btnU">U</button>
+                    <button id="btnR">R</button>
+                    <button id="btnF">F</button>
+                </div>
+                <div class="row">
+                    <button id="btnD">D</button>
+                    <button id="btnL">L</button>
+                    <button id="btnB">B</button>
+                </div>
+                <div class="row">
+                    <button id="btnScramble">🔀 Scramble</button>
+                    <button id="btnReset">↺ Reset</button>
+                </div>
+            </div>
 
-  <footer>Double-clique pour recentrer la caméra</footer>
+            <div class="preview">
+                <div id="rubik-container" role="region" aria-label="Rubik's Cube 3D"></div>
+            </div>
+        </div>
+    </div>
 
-  <script type="module" src="/src/main.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+    import { createRubik } from './src/rubyx.js';
+
+    let rubik = null;
+    const init = () => {
+        const container = document.getElementById('rubik-container');
+        if (!container) return;
+        try {
+        rubik = createRubik(container, { keyboard: true, touch: true });
+        } catch (err) {
+        console.error('Rubik init failed', err);
+        container.innerHTML = `<div class="rubik-error">Erreur d'initialisation du Rubik: ${err.message}</div>`;
+        return;
+        }
+
+        // Button bindings
+        document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doMove('U', 1));
+        document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doMove('R', 1));
+        document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doMove('F', 1));
+        document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doMove('D', -1));
+        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', -1));
+        document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doMove('B', -1));
+
+        document.getElementById('btnScramble').addEventListener('click', () => rubik && rubik.scramble());
+        document.getElementById('btnReset').addEventListener('click', () => rubik && rubik.reset());
+    };
+
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
