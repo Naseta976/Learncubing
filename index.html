@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedCubing Tips - Apprenez le Rubik's Cube</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #ffcc00;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1601299200211-6af095b1a0c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .sidebar {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 40px;
+        }
+
+        section h2 {
+            color: #6a11cb;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* Sidebar */
+        .widget {
+            margin-bottom: 30px;
+        }
+
+        .widget h3 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links a {
+            color: #6a11cb;
+            text-decoration: none;
+            padding: 8px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .quick-links a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cube-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .cube-type {
+            background: #eeebeb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .cube-type:hover {
+            transform: translateY(-5px);
+        }
+
+        .cube-type .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: #201a1a;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Table des matières */
+        .toc {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #2575fc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #6a11cb;
+            text-decoration: underline;
+        }
+
+        /* Statistiques */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 36px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #6a11cb;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ffcc00;
+            border: 3px solid #6a11cb;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #6a11cb;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🧊</span>
+                LearnCubing <span>Tips</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#home" class="active">Accueil</a></li>
+                    <li><a href="methode.html">Méthodes</a></li>
+                    <li><a href="Rubik's.html">Rubik's 3D</a></li>   
+                    <li><a href="contact copy.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Maîtrisez le Rubik's Cube</h1>
+            <p>Découvrez les meilleures techniques, l'histoire fascinante et rejoignez une communauté passionnée de speedcubers</p>
+            <a href="methode.html" class="cta-button">Commencer à apprendre</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Table des matières -->
+        <div class="toc fade-in">
+            <h3>Table des matières</h3>
+            <ul id="tableOfContents">
+                <!-- Généré par JavaScript -->
+            </ul>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats-grid fade-in">
+            <div class="stat-box">
+                <span class="number">500M+</span>
+                Cubes vendus
+            </div>
+            <div class="stat-box">
+                <span class="number">3.47s</span>
+                Record du monde
+            </div>
+            <div class="stat-box">
+                <span class="number">100+</span>
+                Pays participants
+            </div>
+            <div class="stat-box">
+                <span class="number">1974</span>
+                Année de création
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Main Content -->
+            <main class="main-content fade-in">
+                <!-- Histoire -->
+                <section id="history">
+                    <h2>La Naissance du Rubik's Cube</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">19 mai 1974</div>
+                            <p>Ernő Rubik, sculpteur et professeur d'architecture hongrois, crée le premier prototype du "Cube Magique" pour aider ses étudiants à comprendre la géométrie en 3D.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">1976</div>
+                            <p>Obtention du brevet hongrois HU170062 pour le "Büvös Kocka" (Cube Magique).</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">1977</div>
+                            <p>Premières ventes dans les boutiques de jouets de Budapest. Le cube devient rapidement populaire en Hongrie grâce au bouche-à-oreille.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="commercialization">
+                    <h2>Commercialisation Mondiale</h2>
+                    <p>En septembre 1979, grâce à Bernard Farkas, un accord est signé avec Ideal Toys pour distribuer le cube mondialement. Le cube est renommé "Rubik's Cube" et les premiers exemplaires sont exportés en mai 1980 vers Londres, New York et Paris.</p>
+                </section>
+
+                <section id="growth">
+                    <h2>L'Essor International</h2>
+                    <p>Entre 1980 et 1982, plus de 100 millions de cubes sont vendus. Le Rubik's Cube remporte le prix des distributeurs de jouets britanniques en 1980 et 1981. Selon Rubiks.com, 400 millions de cubes officiels ont été vendus depuis 1980.</p>
+                    <p>En 1981, Patrick Bossert, un écolier britannique de 12 ans, publie "You Can Do The Cube" qui se vend à 1.5 million d'exemplaires dans 17 éditions différentes, devenant numéro 1 des best-sellers du Times et du New York Times.</p>
+                </section>
+
+                <section id="evolution">
+                    <h2>Évolution et Variantes</h2>
+                    <p>Après le succès du 3×3×3, plusieurs variantes apparaissent : 2×2×2, 4×4×4, 5×5×5 et bien d'autres. Depuis 2008, V-Cube commercialise des cubes jusqu'au 8×8×8, et grâce à l'impression 3D, des modèles extrêmes comme le 17×17×17 ou même le 33×33×33 ont été créés.</p>
+                    <p>En 2008, Dan Harris publie "Speedsolving the Cube", un guide présentant les principales méthodes de résolution, dont la célèbre méthode CFOP utilisée par les champions.</p>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar fade-in">
+                <!-- Méthodes populaires -->
+                <div class="widget">
+                    <h3>Méthodes Populaires</h3>
+                    <ul class="quick-links">
+                        <li><a href="methode CFOP.html">Méthode CFOP</a></li>
+                        <li><a href="#roux">Méthode Roux</a></li>
+                        <li><a href="methode Blindfolded.html">Méthode Blindfolded</a></li>
+                        <li><a href="#beginner">Méthode Débutant</a></li>
+                    </ul>
+                </div>
+
+                <!-- Types de cubes -->
+                <div class="widget">
+                    <h3>Types de Cubes</h3>
+                    <div class="cube-types">
+                        <div class="cube-type">
+                            <div class="icon">2×2</div>
+                            <div>Pocket Cube</div>
+                        </div>
+                        <div class="cube-type">
+                            <div class="icon">3×3</div>
+                            <div>Classique</div>
+                        </div>
+                        <div class="cube-type">
+                            <div class="icon">4×4</div>
+                            <div>Rubik's Revenge</div>
+                        </div>
+                        <div class="cube-type">
+                            <div class="icon">5×5</div>
+                            <div>Professor's Cube</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Derniers records -->
+                <div class="widget">
+                    <h3>Records Actuels</h3>
+                    <ul class="quick-links">
+                        <li>3×3 Single: 3.47s<li>
+                        <li> Average: 4.86s</li>
+                        <li>4×4 Single: 17.42s</li>
+                        <li>OH Single: 6.20s</li>
+                        <li>Blindfolded: 12.90s</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Liens Rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Accueil</a></li>
+                        <li><a href="methode.html">Méthodes</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mainNav.style.display = 'none';
+                }
+            });
+        });
+
+        // Table des matières dynamique
+        function generateTableOfContents() {
+            const toc = document.getElementById('tableOfContents');
+            const sections = document.querySelectorAll('main section');
+            
+            sections.forEach(section => {
+                const heading = section.querySelector('h2');
+                if (heading) {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = `#${section.id}`;
+                    a.textContent = heading.textContent;
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    toc.appendChild(li);
+                    li.appendChild(a);
+                }
+            });
+        }
+
+        // Navigation active
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            const scrollPosition = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Animation au défilement
+        function checkScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Statistiques animées
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-box .number');
+            const finalValues = [500, 3.47, 100, 1974];
+            
+            stats.forEach((stat, index) => {
+                let current = 0;
+                const target = finalValues[index];
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target + (index === 0 ? 'M+' : index === 2 ? '+' : 's');
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current) + (index === 0 ? 'M+' : index === 2 ? '+' : 's');
+                    }
+                }, 50);
+            });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            generateTableOfContents();
+            checkScrollAnimations();
+            animateStats();
+            
+            // Initialiser le style pour les animations
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            });
+        });
+
+        // Événements de défilement
+        window.addEventListener('scroll', () => {
+            updateActiveNav();
+            checkScrollAnimations();
+        });
+
+        // Gestion des redirections pour les liens de méthodes
+        document.querySelectorAll('.quick-links a, .footer-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        // Si l'élément n'existe pas, on pourrait charger du contenu dynamique
+                        console.log(`Section ${targetId} à développer`);
+                        alert(`La section "${link.textContent}" sera bientôt disponible !`);
+                    }
+                }
+            });
+        });
+
+        // Effet de survol pour les cartes
+        document.querySelectorAll('.cube-type').forEach(cube => {
+            cube.addEventListener('mouseenter', () => {
+                cube.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            });
+            
+            cube.addEventListener('mouseleave', () => {
+                cube.style.boxShadow = 'none';
+            });
+        });
+
+        // Notification de dernière section lue
+        let lastReadSection = '';
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('main section');
+            const scrollPosition = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    if (lastReadSection !== section.id) {
+                        lastReadSection = section.id;
+                        console.log(`Lecture: ${section.querySelector('h2').textContent}`);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
