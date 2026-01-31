@@ -489,32 +489,32 @@
         }
 
         // Button bindings - Faces principales
-        document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doMove('U', 1));
+        document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doMove('U', -1));
         document.getElementById('btnU_inv').addEventListener('click', () => rubik && rubik.doMove('U\'', 1));
         
-        document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doMove('R', 1));
+        document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doMove('R', -1));
         document.getElementById('btnR_inv').addEventListener('click', () => rubik && rubik.doMove('R\'', 1));
         
-        document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doMove('F', 1));
+        document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doMove('F', -1));
         document.getElementById('btnF_inv').addEventListener('click', () => rubik && rubik.doMove('F\'', 1));
         
         document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doMove('D', 1));
         document.getElementById('btnD_inv').addEventListener('click', () => rubik && rubik.doMove('D\'', 1));
         
-        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', 1));
+        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', -1));
         document.getElementById('btnL_inv').addEventListener('click', () => rubik && rubik.doMove('L\'', 1));
         
         document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doMove('B', 1));
         document.getElementById('btnB_inv').addEventListener('click', () => rubik && rubik.doMove('B\'', 1));
         
         // Tranches du milieu
-        document.getElementById('btnM').addEventListener('click', () => rubik && rubik.doMove('M', 1));
+        document.getElementById('btnM').addEventListener('click', () => rubik && rubik.doMove('M', -1));
         document.getElementById('btnM_inv').addEventListener('click', () => rubik && rubik.doMove('M\'', 1));
         
-        document.getElementById('btnE').addEventListener('click', () => rubik && rubik.doMove('E', 1));
+        document.getElementById('btnE').addEventListener('click', () => rubik && rubik.doMove('E', -1));
         document.getElementById('btnE_inv').addEventListener('click', () => rubik && rubik.doMove('E\'', 1));
         
-        document.getElementById('btnS').addEventListener('click', () => rubik && rubik.doMove('S', 1));
+        document.getElementById('btnS').addEventListener('click', () => rubik && rubik.doMove('S', -1));
         document.getElementById('btnS_inv').addEventListener('click', () => rubik && rubik.doMove('S\'', 1));
         
         // Actions
@@ -542,5 +542,4 @@
     document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
