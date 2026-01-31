@@ -17,8 +17,8 @@ export function createRubik(container, opts = {}) {
   const colors = Object.assign({
     U: '#ffffff', // Up (face +Y) - blanc
     D: '#ffff00', // Down (face -Y) - jaune
-    R: '#ff0000', // Right (face +X) - rouge
-    L: '#ff8c00', // Left (face -X) - orange
+    L: '#ff0000', // Right (face +X) - rouge
+    R: '#ff8c00', // Left (face -X) - orange
     F: '#0000ff', // Front (face +Z) - bleu
     B: '#00aa00'  // Back (face -Z) - vert
   }, opts.colors || {});
@@ -393,3 +393,4 @@ export function createRubik(container, opts = {}) {
   function moveAxis(m) { return { U:'y', D:'y', R:'x', L:'x', F:'z', B:'z' }[m]; }
   function moveIndex(m) { return { U:1, D:-1, R:1, L:-1, F:1, B:-1 }[m]; }
 }
+
