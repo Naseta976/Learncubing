@@ -4,8 +4,8 @@
 // Exemple d'appel:
 // createRubik(containerEl, { colors: { U:'#ffffff', D:'#ffff00', R:'#ff0000', L:'#ff8c00', F:'#0000ff', B:'#00aa00' } })
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.154.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from "three";
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // ---------------------------
 // Fonctions publiques exportées
@@ -166,6 +166,18 @@ export function createRubik(container, opts = {}) {
     renderer.render(scene, camera);
   }
   animate();
+
+  // --- Handle window resize ---
+  function onWindowResize() {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    if (w > 0 && h > 0) {
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+  }
+  window.addEventListener('resize', onWindowResize);
 
   function axisVector(axis) {
     if (axis === 'x') return new THREE.Vector3(1,0,0);
