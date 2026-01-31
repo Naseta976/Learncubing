@@ -37,20 +37,35 @@
             display: inline-block;
             background: #ffcc00;
             color: #333;
-            padding: 15px 30px;
-            margin: 20px;
-            margin-bottom: 20px;
-            border-radius: 30px;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             transition: transform 0.3s, box-shadow 0.3s;
             border: none;
             cursor: pointer;
+            min-width: 60px;
         }
         button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button.inverse {
+            background: #6a11cb;
+            color: white;
+        }
+        
+        button.middle {
+            background: #2575fc;
+            color: white;
+        }
+        
+        button.special {
+            background: #00aa00;
+            color: white;
         }
 
         /* Header */
@@ -125,10 +140,12 @@
             font-size: 36px;
         }
 
-        /* Layout: controls left, preview right */
+        /* Layout */
         .ui {
             display: block;
+            margin-top: 20px;
         }
+        
         .ui-grid {
             display: flex;
             gap: 24px;
@@ -136,30 +153,111 @@
             justify-content: center;
             margin-top: 12px;
         }
+        
         .controls {
-            width: 240px;
-            min-width: 180px;
+            width: 280px;
+            min-width: 280px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .controls .row { display:flex; gap:12px; margin-bottom:12px; justify-content:flex-start; }
-        .controls button { flex:1; }
+        
+        .controls h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6a11cb;
+        }
+        
+        .controls-section {
+            margin-bottom: 25px;
+        }
+        
+        .controls-section h4 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 5px;
+        }
+        
+        .row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .controls button {
+            flex: 1;
+            min-width: 70px;
+            margin: 2px;
+        }
 
-        .preview { flex:1; display:flex; justify-content:center; }
+        .preview {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
 
         /* Rubik 3D container */
         #rubik-container {
             width: 100%;
             max-width: 600px;
-            height: 420px;
+            height: 500px;
             border-radius: 12px;
             background: linear-gradient(180deg,#fff8e1,#fff3c2);
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
-            margin: 0 auto 20px;
+            margin: 0 auto;
             position: relative;
         }
-        @media (max-width:768px){
-            .ui-grid { flex-direction:column; }
-            #rubik-container{height:320px;max-width:100%;}
+        
+        @media (max-width: 968px) {
+            .ui-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .controls {
+                width: 100%;
+                max-width: 600px;
+            }
+            
+            #rubik-container {
+                height: 400px;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #rubik-container {
+                height: 350px;
+            }
+            
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+                min-width: 50px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #rubik-container {
+                height: 300px;
+            }
+            
+            .row {
+                gap: 4px;
+            }
+            
+            button {
+                padding: 8px 12px;
+                font-size: 13px;
+                min-width: 45px;
+            }
         }
 
         /* error fallback */
@@ -178,10 +276,6 @@
             max-width: 800px;
             margin: 0 auto 30px;
             font-size: 18px;
-        }
-        .ui h3 {
-            margin-top: 20px;
-            color: #333;
         }
 
         /* Footer */
@@ -223,36 +317,28 @@
             color: #ffcc00;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            #contactForm {
-                padding: 20px;
-            }
-
-            .instructions {
-                padding: 15px;
-                margin: 20px auto;
-            }
+        /* Instructions */
+        .instructions {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .instructions h3 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            text-align: left;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -272,40 +358,91 @@
                     <li><a href="index.html">Accueil</a></li>
                     <li><a href="methode.html">Méthodes</a></li>
                     <li><a href="Rubik's.html">Rubik's 3D</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     
     <!-- Contenu principal -->
-    <div class="ui">
-        <div class="ui-grid">
-            <div class="controls">
-                <h3>Contrôles 🎯</h3>
+    <div class="container">
+        <div class="main-content">
+            <h1>Rubik's Cube 3D </h1>
+            <p>Tournez les faces du cube avec les boutons ou utilisez les touches du clavier (U, R, F, D, L, B)</p>
+            
+            <div class="ui">
+                <div class="ui-grid">
+                    <div class="controls">
+                        <h3>Contrôles 🎯</h3>
+                        
+                        <!-- Faces standards -->
+                        <div class="controls-section">
+                            <h4>Faces Principales</h4>
+                            <div class="row">
+                                <button id="btnU">U</button>
+                                <button id="btnU_inv" class="inverse">U'</button>
+                                <button id="btnR">R</button>
+                                <button id="btnR_inv" class="inverse">R'</button>
+                            </div>
+                            <div class="row">
+                                <button id="btnF">F</button>
+                                <button id="btnF_inv" class="inverse">F'</button>
+                                <button id="btnD">D</button>
+                                <button id="btnD_inv" class="inverse">D'</button>
+                            </div>
+                            <div class="row">
+                                <button id="btnL">L</button>
+                                <button id="btnL_inv" class="inverse">L'</button>
+                                <button id="btnB">B</button>
+                                <button id="btnB_inv" class="inverse">B'</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Tranches du milieu -->
+                        <div class="controls-section">
+                            <h4>Tranches du Milieu</h4>
+                            <div class="row">
+                                <button id="btnM" class="middle">M</button>
+                                <button id="btnM_inv" class="middle">M'</button>
+                                <button id="btnE" class="middle">E</button>
+                                <button id="btnE_inv" class="middle">E'</button>
+                                <button id="btnS" class="middle">S</button>
+                                <button id="btnS_inv" class="middle">S'</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions spéciales -->
+                        <div class="controls-section">
+                            <h4>Actions</h4>
+                            <div class="row">
+                                <button id="btnScramble" class="special">🔀 Scramble</button>
+                                <button id="btnReset" class="special">↺ Reset</button>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="row">
-                    <button id="btnU">U</button>
-                    <button id="btnR">R</button>
-                    <button id="btnF">F</button>
-                </div>
-                <div class="row">
-                    <button id="btnD">D</button>
-                    <button id="btnL">L</button>
-                    <button id="btnB">B</button>
-                </div>
-                <div class="row">
-                    <button id="btnScramble">🔀 Scramble</button>
-                    <button id="btnReset">↺ Reset</button>
+                    <div class="preview">
+                        <div id="rubik-container" role="region" aria-label="Rubik's Cube 3D"></div>
+                    </div>
                 </div>
             </div>
-
-            <div class="preview">
-                <div id="rubik-container" role="region" aria-label="Rubik's Cube 3D"></div>
+            
+            <!-- Instructions -->
+            <div class="instructions">
+                <h3>Comment utiliser :</h3>
+                <ul>
+                    <li><strong>Boutons</strong> : Cliquez sur les boutons pour tourner les faces</li>
+                    <li><strong>Clavier</strong> : Utilisez les touches U, R, F, D, L, B (majuscule/minuscule)</li>
+                    <li><strong>Souris/Tactile</strong> : Cliquez/touchez une face pour la tourner</li>
+                    <li><strong>Rotation libre</strong> : Cliquez et faites glisser pour tourner la vue</li>
+                    <li><strong>Zoom</strong> : Utilisez la molette de la souris ou pincez</li>
+                </ul>
+                <p><strong>Notation</strong> : U = Up (haut), D = Down (bas), R = Right (droite), L = Left (gauche), 
+                F = Front (avant), B = Back (arrière), M = Middle (milieu), E = Equator (équateur), S = Standing (debout)</p>
+                <p><strong>Apostrophe (')</strong> : Indique un mouvement inverse (anti-horaire)</p>
             </div>
         </div>
     </div>
-
 
     <!-- Footer -->
     <footer>
@@ -327,31 +464,82 @@
     import { createRubik } from './src/rubyx.js';
 
     let rubik = null;
+    
     const init = () => {
         const container = document.getElementById('rubik-container');
         if (!container) return;
+        
         try {
-        rubik = createRubik(container, { keyboard: true, touch: true });
+            rubik = createRubik(container, { 
+                keyboard: true, 
+                touch: true,
+                colors: {
+                    U: '#ffffff',  // blanc
+                    D: '#ffff00',  // jaune
+                    R: '#ff0000',  // rouge
+                    L: '#ff8c00',  // orange
+                    F: '#0000ff',  // bleu
+                    B: '#00aa00'   // vert
+                }
+            });
         } catch (err) {
-        console.error('Rubik init failed', err);
-        container.innerHTML = `<div class="rubik-error">Erreur d'initialisation du Rubik: ${err.message}</div>`;
-        return;
+            console.error('Rubik init failed', err);
+            container.innerHTML = `<div class="rubik-error">Erreur d'initialisation du Rubik: ${err.message}</div>`;
+            return;
         }
 
-        // Button bindings
+        // Button bindings - Faces principales
         document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doMove('U', 1));
+        document.getElementById('btnU_inv').addEventListener('click', () => rubik && rubik.doMove('U\'', 1));
+        
         document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doMove('R', 1));
+        document.getElementById('btnR_inv').addEventListener('click', () => rubik && rubik.doMove('R\'', 1));
+        
         document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doMove('F', 1));
-        document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doMove('D', -1));
-        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', -1));
-        document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doMove('B', -1));
-
+        document.getElementById('btnF_inv').addEventListener('click', () => rubik && rubik.doMove('F\'', 1));
+        
+        document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doMove('D', 1));
+        document.getElementById('btnD_inv').addEventListener('click', () => rubik && rubik.doMove('D\'', 1));
+        
+        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', 1));
+        document.getElementById('btnL_inv').addEventListener('click', () => rubik && rubik.doMove('L\'', 1));
+        
+        document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doMove('B', 1));
+        document.getElementById('btnB_inv').addEventListener('click', () => rubik && rubik.doMove('B\'', 1));
+        
+        // Tranches du milieu
+        document.getElementById('btnM').addEventListener('click', () => rubik && rubik.doMove('M', 1));
+        document.getElementById('btnM_inv').addEventListener('click', () => rubik && rubik.doMove('M\'', 1));
+        
+        document.getElementById('btnE').addEventListener('click', () => rubik && rubik.doMove('E', 1));
+        document.getElementById('btnE_inv').addEventListener('click', () => rubik && rubik.doMove('E\'', 1));
+        
+        document.getElementById('btnS').addEventListener('click', () => rubik && rubik.doMove('S', 1));
+        document.getElementById('btnS_inv').addEventListener('click', () => rubik && rubik.doMove('S\'', 1));
+        
+        // Actions
         document.getElementById('btnScramble').addEventListener('click', () => rubik && rubik.scramble());
         document.getElementById('btnReset').addEventListener('click', () => rubik && rubik.reset());
+        
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            // Adjust on resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    mainNav.style.display = '';
+                }
+            });
+        }
     };
 
     document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
