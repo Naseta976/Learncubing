@@ -18,7 +18,7 @@ export function createRubik(container, opts = {}) {
     U: '#ffffff', // Up (face +Y) - blanc
     D: '#ffff00', // Down (face -Y) - jaune
     R: '#ff0000', // Right (face +X) - rouge
-    L: '#ff8c00', // Left (face -X) - orange
+    L: '#FFA500', // Left (face -X) - orange
     F: '#0000ff', // Front (face +Z) - bleu
     B: '#00aa00'  // Back (face -Z) - vert
   }, opts.colors || {});
@@ -44,6 +44,9 @@ export function createRubik(container, opts = {}) {
   const dir = new THREE.DirectionalLight(0xffffff, 0.5);
   dir.position.set(5,10,7);
   scene.add(dir);
+  // Add a subtle ambient light so undersides don't go fully black
+  const ambient = new THREE.AmbientLight(0xffffff, 0.22);
+  scene.add(ambient);
 
   // --- Rubik construction ---
   const GAP = 1.05;
@@ -60,16 +63,18 @@ export function createRubik(container, opts = {}) {
   const COLORS = {
     white: toHex(colors.U),   // '#ffffff'
     yellow: toHex(colors.D),  // '#ffff00'
-    red: toHex(colors.R),     // '#ff0000'
-    orange: toHex(colors.L),  // '#ff8c00'
+    red: toHex(colors.L),     // '#ff0000'
+    orange: toHex(colors.R),  // '#ff8c00'
     blue: toHex(colors.F),    // '#0000ff'
     green: toHex(colors.B),   // '#00aa00'
-    black: 0x222222
+    black: 0x444444
   };
 
   function stickerMaterial(color) {
-    return new THREE.MeshLambertMaterial({ 
-      color, 
+    return new THREE.MeshLambertMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 0.35,
       side: THREE.DoubleSide,
       transparent: false,
       opacity: 1
