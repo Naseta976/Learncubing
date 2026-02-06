@@ -17,8 +17,8 @@ export function createRubik(container, opts = {}) {
   const colors = Object.assign({
     U: '#ffffff', // Up (face +Y) - blanc
     D: '#ffff00', // Down (face -Y) - jaune
-    L: '#ff0000', // Left (face +X) - rouge
-    R: '#ff8c00', // Right (face -X) - orange
+    R: '#ff0000', // Right (face +X) - rouge
+    L: '#ff8c00', // Left (face -X) - orange
     F: '#0000ff', // Front (face +Z) - bleu
     B: '#00aa00'  // Back (face -Z) - vert
   }, opts.colors || {});
@@ -52,21 +52,35 @@ export function createRubik(container, opts = {}) {
   scene.add(cubeGroup);
 
   // Convert hex color string '#rrggbb' to Number for three.js
-  const toHex = s => parseInt(s.replace('#',''), 16);
+  const toHex = s => {
+    const hex = s.replace('#', '');
+    return parseInt(hex, 16);
+  };
+  
   const COLORS = {
-    white: toHex(colors.U), // '#ffffff'
-    yellow: toHex(colors.D), // '#ffff00'
-    red: toHex(colors.R), // '#ff0000'
-    orange: toHex(colors.L), // '#ff8c00'
-    blue: toHex(colors.F), // '#0000ff'
-    green: toHex(colors.B), // '#00aa00'
+    white: toHex(colors.U),   // '#ffffff'
+    yellow: toHex(colors.D),  // '#ffff00'
+    red: toHex(colors.R),     // '#ff0000'
+    orange: toHex(colors.L),  // '#ff8c00'
+    blue: toHex(colors.F),    // '#0000ff'
+    green: toHex(colors.B),   // '#00aa00'
     black: 0x222222
   };
 
   function stickerMaterial(color) {
-    return new THREE.MeshLambertMaterial({ color, side: THREE.FrontSide });
+    return new THREE.MeshLambertMaterial({ 
+      color, 
+      side: THREE.DoubleSide,
+      transparent: false,
+      opacity: 1
+    });
   }
-  const darkMat = new THREE.MeshLambertMaterial({ color: COLORS.black });
+  
+  const darkMat = new THREE.MeshLambertMaterial({ 
+    color: COLORS.black,
+    transparent: false,
+    opacity: 1
+  });
 
   const SIZE = 0.95; // cubie size
   const boxGeo = new THREE.BoxGeometry(SIZE, SIZE, SIZE);
@@ -74,75 +88,141 @@ export function createRubik(container, opts = {}) {
   function createCubie(ix,iy,iz) {
     const materials = [];
     // BoxGeometry materials order: +X, -X, +Y, -Y, +Z, -Z
-    materials.push(ix === 1 ? stickerMaterial(COLORS.red)    : darkMat);    // +X
-    materials.push(ix === -1 ? stickerMaterial(COLORS.orange) : darkMat);   // -X
-    materials.push(iy === 1 ? stickerMaterial(COLORS.white)  : darkMat);    // +Y
-    materials.push(iy === -1 ? stickerMaterial(COLORS.yellow): darkMat);    // -Y
-    materials.push(iz === 1 ? stickerMaterial(COLORS.blue)   : darkMat);    // +Z
-    materials.push(iz === -1 ? stickerMaterial(COLORS.green) : darkMat);    // -Z
+    
+    // Face droite (+X) - ROUGE (index 0)
+    materials.push(ix === 1 ? stickerMaterial(COLORS.red) : darkMat);
+    
+    // Face gauche (-X) - ORANGE (index 1)
+    materials.push(ix === -1 ? stickerMaterial(COLORS.orange) : darkMat);
+    
+    // Face haut (+Y) - BLANC (index 2)
+    materials.push(iy === 1 ? stickerMaterial(COLORS.white) : darkMat);
+    
+    // Face bas (-Y) - JAUNE (index 3)
+    materials.push(iy === -1 ? stickerMaterial(COLORS.yellow) : darkMat);
+    
+    // Face avant (+Z) - BLEU (index 4)
+    materials.push(iz === 1 ? stickerMaterial(COLORS.blue) : darkMat);
+    
+    // Face arrière (-Z) - VERT (index 5)
+    materials.push(iz === -1 ? stickerMaterial(COLORS.green) : darkMat);
 
     const mesh = new THREE.Mesh(boxGeo, materials);
     mesh.position.set(ix * GAP, iy * GAP, iz * GAP);
     mesh.userData.pos = { x: ix, y: iy, z: iz };
+    mesh.userData.originalIndex = cubies.length;
     cubeGroup.add(mesh);
     cubies.push(mesh);
+    return mesh;
   }
 
-  for (let x=-1;x<=1;x++) for (let y=-1;y<=1;y++) for (let z=-1;z<=1;z++) createCubie(x,y,z);
+  for (let x=-1;x<=1;x++) for (let y=-1;y<=1;y++) for (let z=-1;z<=1;z++) {
+    createCubie(x,y,z);
+  }
 
   // --- Rotation management ---
   let rotationQueue = [];
   let rotating = null;
+  const ROTATION_SPEED = Math.PI * 2; // radians per second
 
   function rotateSlice(axis, index, dir=1) {
+    // Vérifier que la tranche n'est pas déjà en rotation
+    if (rotating && rotating.axis === axis && rotating.index === index) {
+      return;
+    }
     rotationQueue.push({ axis, index, dir });
     if (!rotating) startNextRotation();
   }
 
   function startNextRotation() {
-    if (rotationQueue.length === 0) { rotating = null; return; }
+    if (rotationQueue.length === 0) { 
+      rotating = null; 
+      return; 
+    }
+    
     const move = rotationQueue.shift();
     const { axis, index, dir } = move;
     const group = new THREE.Group();
     scene.add(group);
 
+    // Positionner le groupe au centre de la tranche
+    const center = new THREE.Vector3();
+    if (axis === 'x') center.set(index * GAP, 0, 0);
+    else if (axis === 'y') center.set(0, index * GAP, 0);
+    else center.set(0, 0, index * GAP);
+    
+    group.position.copy(center);
+
+    // Sélectionner les cubes à tourner
     const selected = cubies.filter(c => Math.round(c.userData.pos[axis]) === index);
-    selected.forEach(c => group.attach(c));
+    
+    // Déplacer les cubes dans le groupe de rotation
+    selected.forEach(c => {
+      // Sauvegarder la position mondiale actuelle
+      const worldPos = new THREE.Vector3();
+      c.getWorldPosition(worldPos);
+      
+      // Détacher du groupe principal
+      cubeGroup.remove(c);
+      
+      // Attacher au groupe de rotation
+      group.add(c);
+      
+      // Ajuster la position relative au centre du groupe
+      c.position.copy(worldPos).sub(center);
+    });
 
     rotating = {
       group,
       axis,
+      index,
       dir,
       angle: 0,
-      target: Math.PI/2 * dir,
-      speed: Math.PI/2 * 6,
+      target: Math.PI/2 * dir, // Quart de tour
+      speed: ROTATION_SPEED,
       cubies: selected
     };
   }
 
   function finalizeRotation() {
     const { group, cubies } = rotating;
+    
+    // Mettre à jour chaque cube
     cubies.forEach(c => {
-      c.updateWorldMatrix(true, false);
-      const pos = new THREE.Vector3();
-      c.getWorldPosition(pos);
-
-      const nx = Math.round(pos.x / GAP);
-      const ny = Math.round(pos.y / GAP);
-      const nz = Math.round(pos.z / GAP);
-      c.position.set(nx*GAP, ny*GAP, nz*GAP);
+      // Obtenir la position mondiale finale
+      const worldPos = new THREE.Vector3();
+      c.getWorldPosition(worldPos);
+      
+      // Convertir en coordonnées discrètes (-1, 0, 1)
+      const nx = Math.round(worldPos.x / GAP);
+      const ny = Math.round(worldPos.y / GAP);
+      const nz = Math.round(worldPos.z / GAP);
+      
+      // Obtenir l'orientation finale
+      const worldQuat = new THREE.Quaternion();
+      c.getWorldQuaternion(worldQuat);
+      
+      // Détacher du groupe de rotation
+      group.remove(c);
+      
+      // Réattacher au groupe principal
+      cubeGroup.add(c);
+      
+      // Mettre à jour la position et orientation
+      c.position.set(nx * GAP, ny * GAP, nz * GAP);
       c.userData.pos = { x: nx, y: ny, z: nz };
-
-      const m = new THREE.Matrix4();
-      m.copy(c.matrixWorld);
-      const e = new THREE.Euler().setFromRotationMatrix(m);
-      const snap = v => Math.round(v / (Math.PI/2)) * (Math.PI/2);
-      c.rotation.set(snap(e.x), snap(e.y), snap(e.z));
-
-      cubeGroup.attach(c);
+      
+      // Convertir la quaternion en Euler et aligner sur 90°
+      const euler = new THREE.Euler().setFromQuaternion(worldQuat, 'XYZ');
+      const snap = angle => Math.round(angle / (Math.PI/2)) * (Math.PI/2);
+      c.rotation.set(snap(euler.x), snap(euler.y), snap(euler.z));
     });
+    
+    // Nettoyer
     scene.remove(group);
     rotating = null;
+    
+    // Démarrer la rotation suivante
     startNextRotation();
   }
 
@@ -151,16 +231,28 @@ export function createRubik(container, opts = {}) {
 
   function animate() {
     requestAnimationFrame(animate);
-    const dt = clock.getDelta();
+    const dt = Math.min(clock.getDelta(), 0.1);
     controls.update();
 
     if (rotating) {
       const step = rotating.speed * dt;
       const remain = rotating.target - rotating.angle;
       let delta = Math.sign(remain) * Math.min(Math.abs(step), Math.abs(remain));
-      rotating.group.rotateOnAxis(axisVector(rotating.axis), delta);
+      
+      // Tourner autour de l'axe approprié
+      const axisVec = axisVector(rotating.axis);
+      rotating.group.rotateOnWorldAxis(axisVec, delta);
+      
       rotating.angle += delta;
-      if (Math.abs(rotating.angle - rotating.target) < 1e-4) finalizeRotation();
+      
+      // Vérifier si la rotation est terminée
+      if (Math.abs(rotating.angle) >= Math.abs(rotating.target)) {
+        // Ajustement final pour précision
+        const correction = rotating.target - rotating.angle;
+        rotating.group.rotateOnWorldAxis(axisVec, correction);
+        rotating.angle = rotating.target;
+        finalizeRotation();
+      }
     }
 
     renderer.render(scene, camera);
@@ -187,13 +279,20 @@ export function createRubik(container, opts = {}) {
 
   // --- High-level moves ---
   function doMove(move, dir=1) {
-    switch (move) {
-      case 'U': rotateSlice('y', 1, -dir); break;
-      case 'D': rotateSlice('y', -1, dir); break;
-      case 'R': rotateSlice('x', 1, dir); break;
-      case 'L': rotateSlice('x', -1, -dir); break;
-      case 'F': rotateSlice('z', 1, dir); break;
-      case 'B': rotateSlice('z', -1, -dir); break;
+    // Support pour les mouvements inversés (avec apostrophe)
+    const moveName = move.replace("'", "");
+    const actualDir = move.includes("'") ? -1 : dir;
+    
+    switch (moveName) {
+      case 'U': rotateSlice('y', 1, actualDir); break;
+      case 'D': rotateSlice('y', -1, actualDir); break;
+      case 'R': rotateSlice('x', 1, actualDir); break;
+      case 'L': rotateSlice('x', -1, actualDir); break;
+      case 'F': rotateSlice('z', 1, actualDir); break;
+      case 'B': rotateSlice('z', -1, actualDir); break;
+      case 'M': rotateSlice('x', 0, actualDir); break;  // Tranche du milieu
+      case 'E': rotateSlice('y', 0, actualDir); break;  // Tranche équatoriale
+      case 'S': rotateSlice('z', 0, actualDir); break;  // Tranche du milieu front/back
     }
   }
 
@@ -201,16 +300,17 @@ export function createRubik(container, opts = {}) {
   function onKeyDown(e) {
     if (e.repeat) return;
     const key = e.key.toUpperCase();
-    if (['U','R','F','D','L','B'].includes(key)) {
-      const dir = e.shiftKey ? -1 : 1; // shift inverse la direction
+    const moves = ['U','R','F','D','L','B','M','E','S'];
+    
+    if (moves.includes(key)) {
+      const dir = e.shiftKey ? 1 : -1;
       doMove(key, dir);
     }
   }
 
-  // --- Interaction tactile / souris (pointer events) ---
-  // Utilise raycast pour détecter la face touchée et un geste (tap / swipe) pour déterminer la rotation.
+  // --- Interaction tactile / souris ---
   const raycaster = new THREE.Raycaster();
-  let pointerState = null; // { id, startX, startY, lastX, lastY, intersect }
+  let pointerState = null;
 
   function getIntersection(clientX, clientY) {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -223,60 +323,45 @@ export function createRubik(container, opts = {}) {
 
   function handleTap(intersect) {
     if (!intersect) return;
-    // calcule la normale en espace monde
-    const normal = intersect.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(intersect.object.matrixWorld)).normalize();
+    
+    const normal = intersect.face.normal.clone()
+      .applyMatrix3(new THREE.Matrix3().getNormalMatrix(intersect.object.matrixWorld))
+      .normalize();
+    
     const abs = { x: Math.abs(normal.x), y: Math.abs(normal.y), z: Math.abs(normal.z) };
-    // déduire la face la plus proche
+    
     if (abs.x > abs.y && abs.x > abs.z) {
       const idx = Math.round(intersect.object.userData.pos.x);
-      const dir = normal.x > 0 ? 1 : -1;
-      rotateSlice('x', idx, dir);
+      rotateSlice('x', idx, 1);
     } else if (abs.y > abs.x && abs.y > abs.z) {
       const idx = Math.round(intersect.object.userData.pos.y);
-      const dir = normal.y > 0 ? -1 : 1; // sens heuristique
-      rotateSlice('y', idx, dir);
+      rotateSlice('y', idx, 1);
     } else {
       const idx = Math.round(intersect.object.userData.pos.z);
-      const dir = normal.z > 0 ? 1 : -1;
-      rotateSlice('z', idx, dir);
+      rotateSlice('z', idx, 1);
     }
   }
 
-  function handleSwipe(intersect, dx, dy) {
-    if (!intersect) return;
-    const normal = intersect.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(intersect.object.matrixWorld)).normalize();
-    const abs = { x: Math.abs(normal.x), y: Math.abs(normal.y), z: Math.abs(normal.z) };
-    // heuristiques pour mapper swipe -> axe + direction
-    if (abs.x > abs.y && abs.x > abs.z) {
-      // touché sur face X (L/R)
-      const idx = Math.round(intersect.object.userData.pos.x);
-      const dir = dx > 0 ? -Math.sign(normal.x) : Math.sign(normal.x);
-      rotateSlice('x', idx, dir);
-    } else if (abs.y > abs.x && abs.y > abs.z) {
-      // face Y (U/D)
-      const idx = Math.round(intersect.object.userData.pos.y);
-      const dir = dy > 0 ? Math.sign(normal.y) : -Math.sign(normal.y);
-      rotateSlice('y', idx, dir);
-    } else {
-      // face Z (F/B)
-      const idx = Math.round(intersect.object.userData.pos.z);
-      const dir = dx > 0 ? Math.sign(normal.z) : -Math.sign(normal.z);
-      rotateSlice('z', idx, dir);
-    }
-  }
-
-  // pointer handlers (noms pour pouvoir attacher/détacher facilement)
+  // pointer handlers
   function pointerDownHandler(e) {
     if (e.isPrimary === false) return;
     renderer.domElement.setPointerCapture(e.pointerId);
     const inter = getIntersection(e.clientX, e.clientY);
-    pointerState = { id: e.pointerId, startX: e.clientX, startY: e.clientY, lastX: e.clientX, lastY: e.clientY, intersect: inter };
-    controls.enabled = false; // temporairement désactiver l'orbite pendant l'interaction
+    pointerState = { 
+      id: e.pointerId, 
+      startX: e.clientX, 
+      startY: e.clientY, 
+      lastX: e.clientX, 
+      lastY: e.clientY, 
+      intersect: inter 
+    };
+    controls.enabled = false;
   }
 
   function pointerMoveHandler(e) {
     if (!pointerState || e.pointerId !== pointerState.id) return;
-    pointerState.lastX = e.clientX; pointerState.lastY = e.clientY;
+    pointerState.lastX = e.clientX; 
+    pointerState.lastY = e.clientY;
   }
 
   function pointerUpHandler(e) {
@@ -286,11 +371,8 @@ export function createRubik(container, opts = {}) {
     const dist = Math.hypot(dx, dy);
     const inter = pointerState.intersect;
 
-    if (dist < 10) {
-      // tap
+    if (dist < 15) {
       handleTap(inter);
-    } else {
-      handleSwipe(inter, dx, dy);
     }
 
     try { renderer.domElement.releasePointerCapture(e.pointerId); } catch (err) {}
@@ -299,8 +381,8 @@ export function createRubik(container, opts = {}) {
   }
 
   // --- Activation / UI toggles ---
-  let keyboardEnabled = opts.keyboard !== false; // true by default
-  let touchEnabled = opts.touch !== false; // true by default
+  let keyboardEnabled = opts.keyboard !== false;
+  let touchEnabled = opts.touch !== false;
 
   function addKeyboardListeners() { window.addEventListener('keydown', onKeyDown); }
   function removeKeyboardListeners() { window.removeEventListener('keydown', onKeyDown); }
@@ -331,14 +413,16 @@ export function createRubik(container, opts = {}) {
   if (keyboardEnabled) addKeyboardListeners();
   if (touchEnabled) addPointerListeners();
 
-  // small UI in top-right corner
+  // UI
   const uiWrap = document.createElement('div');
   uiWrap.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;padding:6px;background:rgba(0,0,0,0.35);border-radius:6px;color:#fff;font-size:12px;';
   uiWrap.className = 'rubix-controls-overlay';
 
   const kbBtn = document.createElement('button');
   const touchBtn = document.createElement('button');
-  [kbBtn, touchBtn].forEach(b => { b.style.cssText = 'background:#222;color:#fff;border:1px solid #444;padding:6px;border-radius:4px;cursor:pointer;'; });
+  [kbBtn, touchBtn].forEach(b => { 
+    b.style.cssText = 'background:#222;color:#fff;border:1px solid #444;padding:6px;border-radius:4px;cursor:pointer;'; 
+  });
 
   kbBtn.textContent = keyboardEnabled ? 'Clavier: ON' : 'Clavier: OFF';
   touchBtn.textContent = touchEnabled ? 'Tactile: ON' : 'Tactile: OFF';
@@ -348,7 +432,6 @@ export function createRubik(container, opts = {}) {
 
   uiWrap.appendChild(kbBtn);
   uiWrap.appendChild(touchBtn);
-  // position relative to container
   container.style.position = container.style.position || 'relative';
   container.appendChild(uiWrap);
 
@@ -357,41 +440,31 @@ export function createRubik(container, opts = {}) {
     touchBtn.textContent = touchEnabled ? 'Tactile: ON' : 'Tactile: OFF';
   }
 
-  // expose a destroy helper to clean up listeners and UI
   function destroy() {
     removeKeyboardListeners();
     removePointerListeners();
     try { uiWrap.remove(); } catch (e) {}
   }
 
-  // note: si besoin on peut exposer une API pour activer/désactiver ces contrôles
-
-  // Public API returned to the caller
+  // Public API
   return {
     doMove,
     setKeyboardEnabled,
     setTouchEnabled,
     scramble(times=20) {
-      const moves = ['U','R','F','D','L','B'];
+      const moves = ['U','U\'','R','R\'','F','F\'','D','D\'','L','L\'','B','B\'','M','M\''];
       for (let i=0;i<times;i++) {
         const m = moves[Math.floor(Math.random()*moves.length)];
-        const d = Math.random() > 0.5 ? 1 : -1;
-        rotationQueue.push({ axis: moveAxis(m), index: moveIndex(m), dir: d });
+        doMove(m, 1);
       }
-      if (!rotating) startNextRotation();
     },
     reset() {
       rotationQueue = [];
       rotating = null;
-      cubies.slice().forEach(c => c.removeFromParent());
+      cubies.forEach(c => c.removeFromParent());
       cubies.length = 0;
       for (let x=-1;x<=1;x++) for (let y=-1;y<=1;y++) for (let z=-1;z<=1;z++) createCubie(x,y,z);
     },
     destroy
   };
-
-  function moveAxis(m) { return { U:'y', D:'y', R:'x', L:'x', F:'z', B:'z' }[m]; }
-  function moveIndex(m) { return { U:1, D:-1, R:1, L:-1, F:1, B:-1 }[m]; }
 }
-
-
