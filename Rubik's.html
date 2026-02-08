@@ -125,6 +125,9 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
+            position: absolute;
+            left: 12px;
+            top: 12px;
         }
 
         /* Contenu principal */
@@ -242,6 +245,17 @@
                 font-size: 14px;
                 min-width: 50px;
             }
+            /* On small screens hide the side controls by default and add a toggle */
+            .controls { display: none; position: fixed; left: 8px; right: 8px; bottom: 80px; z-index: 40; max-height: 55vh; overflow:auto; }
+            .controls.show { display: block; }
+            #toggleControlsBtn { display: block; position: fixed; left: 12px; bottom: 12px; z-index: 50; background:#ffcc00; color:#333; border-radius:8px; padding:10px 14px; box-shadow:0 6px 18px rgba(0,0,0,0.15); }
+
+            /* Mobile nav: hide regular nav and make dropdown with slide animation */
+            #mainNav { position: absolute; left: 0; right: 0; top: 56px; background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 0 12px; z-index: 60; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-6px); transition: max-height 260ms ease, opacity 260ms ease, transform 260ms ease; }
+            #mainNav.show { max-height: 320px; opacity: 1; transform: translateY(0); }
+            #mainNav ul { display: flex; flex-direction: column; gap: 8px; align-items: stretch; padding: 12px 4px; margin: 0; }
+            #mainNav ul li { list-style: none; }
+            #mainNav ul li a { display: block; padding: 8px 10px; border-radius: 6px; }
         }
         
         @media (max-width: 480px) {
@@ -490,33 +504,33 @@
         }
 
         // Button bindings - Faces principales
-        document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doMove('U', -1));
-        document.getElementById('btnU_inv').addEventListener('click', () => rubik && rubik.doMove('U\'', 1));
+        document.getElementById('btnU').addEventListener('click', () => rubik && rubik.doRelativeMove('U', false));
+        document.getElementById('btnU_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('U', true));
         
-        document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doMove('R', -1));
-        document.getElementById('btnR_inv').addEventListener('click', () => rubik && rubik.doMove('R\'', 1));
+        document.getElementById('btnR').addEventListener('click', () => rubik && rubik.doRelativeMove('R', false));
+        document.getElementById('btnR_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('R', true));
         
-        document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doMove('F', -1));
-        document.getElementById('btnF_inv').addEventListener('click', () => rubik && rubik.doMove('F\'', 1));
+        document.getElementById('btnF').addEventListener('click', () => rubik && rubik.doRelativeMove('F', false));
+        document.getElementById('btnF_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('F', true));
         
-        document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doMove('D', 1));
-        document.getElementById('btnD_inv').addEventListener('click', () => rubik && rubik.doMove('D\'', 1));
+        document.getElementById('btnD').addEventListener('click', () => rubik && rubik.doRelativeMove('D', false));
+        document.getElementById('btnD_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('D', true));
         
-        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doMove('L', -1));
-        document.getElementById('btnL_inv').addEventListener('click', () => rubik && rubik.doMove('L\'', 1));
+        document.getElementById('btnL').addEventListener('click', () => rubik && rubik.doRelativeMove('L', false));
+        document.getElementById('btnL_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('L', true));
         
-        document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doMove('B', 1));
-        document.getElementById('btnB_inv').addEventListener('click', () => rubik && rubik.doMove('B\'', 1));
+        document.getElementById('btnB').addEventListener('click', () => rubik && rubik.doRelativeMove('B', false));
+        document.getElementById('btnB_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('B', true));
         
         // Tranches du milieu
-        document.getElementById('btnM').addEventListener('click', () => rubik && rubik.doMove('M', -1));
-        document.getElementById('btnM_inv').addEventListener('click', () => rubik && rubik.doMove('M\'', 1));
+        document.getElementById('btnM').addEventListener('click', () => rubik && rubik.doRelativeMove('M', false));
+        document.getElementById('btnM_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('M', true));
         
-        document.getElementById('btnE').addEventListener('click', () => rubik && rubik.doMove('E', -1));
-        document.getElementById('btnE_inv').addEventListener('click', () => rubik && rubik.doMove('E\'', 1));
+        document.getElementById('btnE').addEventListener('click', () => rubik && rubik.doRelativeMove('E', false));
+        document.getElementById('btnE_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('E', true));
         
-        document.getElementById('btnS').addEventListener('click', () => rubik && rubik.doMove('S', -1));
-        document.getElementById('btnS_inv').addEventListener('click', () => rubik && rubik.doMove('S\'', 1));
+        document.getElementById('btnS').addEventListener('click', () => rubik && rubik.doRelativeMove('S', false));
+        document.getElementById('btnS_inv').addEventListener('click', () => rubik && rubik.doRelativeMove('S', true));
         
         // Actions
         document.getElementById('btnScramble').addEventListener('click', () => rubik && rubik.scramble());
@@ -527,17 +541,85 @@
         const mainNav = document.getElementById('mainNav');
         
         if (mobileMenuBtn && mainNav) {
+            // Toggle class on mainNav so CSS handles layout
             mobileMenuBtn.addEventListener('click', () => {
-                mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+                const showing = mainNav.classList.toggle('show');
+                mobileMenuBtn.setAttribute('aria-expanded', showing ? 'true' : 'false');
             });
-            
-            // Adjust on resize
+
+            // On resize, ensure nav visibility is reset for desktop
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 768) {
-                    mainNav.style.display = '';
+                    mainNav.classList.remove('show');
+                    mobileMenuBtn.style.display = '';
+                } else {
+                    // ensure button visible on small screens
+                    mobileMenuBtn.style.display = 'block';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 }
             });
+
+            // initial state
+            if (window.innerWidth <= 768) {
+                mobileMenuBtn.style.display = 'block';
+                mainNav.classList.remove('show');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
         }
+
+        // Controls toggle for small screens
+        const toggleControlsBtn = document.createElement('button');
+        toggleControlsBtn.id = 'toggleControlsBtn';
+        toggleControlsBtn.setAttribute('aria-expanded', 'false');
+        toggleControlsBtn.textContent = 'Afficher contrôles';
+        toggleControlsBtn.style.display = 'none';
+        document.body.appendChild(toggleControlsBtn);
+
+        const controlsEl = document.querySelector('.controls');
+        function updateMobileControls() {
+            if (!controlsEl) return;
+            if (window.innerWidth <= 768) {
+                controlsEl.classList.remove('show');
+                toggleControlsBtn.style.display = 'block';
+                toggleControlsBtn.textContent = 'Afficher contrôles';
+                toggleControlsBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                controlsEl.classList.remove('show');
+                toggleControlsBtn.style.display = 'none';
+                toggleControlsBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        toggleControlsBtn.addEventListener('click', () => {
+            if (!controlsEl) return;
+            const showing = controlsEl.classList.toggle('show');
+            toggleControlsBtn.textContent = showing ? 'Masquer contrôles' : 'Afficher contrôles';
+            toggleControlsBtn.setAttribute('aria-expanded', showing ? 'true' : 'false');
+        });
+
+        window.addEventListener('resize', updateMobileControls);
+        updateMobileControls();
+
+        // Close mobile nav if click/touch happens outside
+        function outsideClickHandler(e) {
+            try {
+                const t = e.target;
+                const clickedInsideNav = mainNav && mainNav.contains(t);
+                const clickedMenuBtn = mobileMenuBtn && mobileMenuBtn.contains(t);
+                const clickedToggleControls = typeof toggleControlsBtn !== 'undefined' && toggleControlsBtn && toggleControlsBtn.contains && toggleControlsBtn.contains(t);
+                if (mainNav && mainNav.classList.contains('show') && !clickedInsideNav && !clickedMenuBtn) {
+                    mainNav.classList.remove('show');
+                    if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+                // also hide controls panel when clicking outside it on mobile
+                if (controlsEl && controlsEl.classList.contains('show') && !controlsEl.contains(t) && !clickedToggleControls) {
+                    controlsEl.classList.remove('show');
+                    if (toggleControlsBtn) { toggleControlsBtn.textContent = 'Afficher contrôles'; toggleControlsBtn.setAttribute('aria-expanded', 'false'); }
+                }
+            } catch (err) {}
+        }
+        document.addEventListener('click', outsideClickHandler);
+        document.addEventListener('touchstart', outsideClickHandler);
     };
 
     document.addEventListener('DOMContentLoaded', init);
