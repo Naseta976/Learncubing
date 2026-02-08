@@ -114,21 +114,41 @@ function startNextRotation() {
 function finalizeRotation() {
   const { group, cubies } = rotating;
   cubies.forEach(c => {
+    // Ensure world matrix is up-to-date
     c.updateWorldMatrix(true, false);
-    const pos = new THREE.Vector3();
-    c.getWorldPosition(pos);
 
-    const nx = Math.round(pos.x / GAP);
-    const ny = Math.round(pos.y / GAP);
-    const nz = Math.round(pos.z / GAP);
-    c.position.set(nx*GAP, ny*GAP, nz*GAP);
-    c.userData.pos = { x: nx, y: ny, z: nz };
+    // --- Snap world position to the nearest slot ---
+    const worldPos = new THREE.Vector3();
+    c.getWorldPosition(worldPos);
+    const nx = Math.round(worldPos.x / GAP);
+    const ny = Math.round(worldPos.y / GAP);
+    const nz = Math.round(worldPos.z / GAP);
+    const snappedWorldPos = new THREE.Vector3(nx * GAP, ny * GAP, nz * GAP);
 
-    const m = new THREE.Matrix4();
-    m.copy(c.matrixWorld);
-    const e = new THREE.Euler().setFromRotationMatrix(m);
+    // --- Snap world rotation to 90 degree increments ---
+    const worldQuat = new THREE.Quaternion();
+    c.getWorldQuaternion(worldQuat);
+    const worldEuler = new THREE.Euler().setFromQuaternion(worldQuat);
     const snap = v => Math.round(v / (Math.PI/2)) * (Math.PI/2);
-    c.rotation.set(snap(e.x), snap(e.y), snap(e.z));
+    worldEuler.set(snap(worldEuler.x), snap(worldEuler.y), snap(worldEuler.z));
+    const snappedWorldQuat = new THREE.Quaternion().setFromEuler(worldEuler);
+
+    // Move the cubie to the scene temporarily to set explicit world-based values,
+    // then convert them into local coordinates relative to cubeGroup.
+    scene.attach(c);
+
+    // Position in local space of cubeGroup
+    const localPos = cubeGroup.worldToLocal(snappedWorldPos.clone());
+    c.position.copy(localPos);
+
+    // Convert snapped world quaternion into local quaternion for cubeGroup
+    const cubeWorldQuat = new THREE.Quaternion();
+    cubeGroup.getWorldQuaternion(cubeWorldQuat);
+    const invCubeQuat = cubeWorldQuat.clone().invert();
+    const localQuat = invCubeQuat.multiply(snappedWorldQuat);
+    c.quaternion.copy(localQuat);
+
+    c.userData.pos = { x: nx, y: ny, z: nz };
 
     cubeGroup.attach(c);
   });
@@ -208,6 +228,101 @@ renderer.domElement.addEventListener('dblclick', () => {
   controls.reset();
   camera.position.set(4,4,6);
 });
+
+// --- Keyboard handling (U R F D L B) + middle slices (M E S) ---
+let _lastKey = { key: null, time: 0 };
+const PRIME_WINDOW = 600; // ms to accept a following apostrophe as prime (more tolerant)
+const MOVE_KEYS = ['U','R','F','D','L','B'];
+const MID_KEYS = ['M','E','S'];
+const HOLD_INTERVAL = 300; // ms between repeated moves when holding a key
+const activeHolds = new Map(); // letter -> intervalId
+
+function doMiddleMove(m, dir=1) {
+  switch (m) {
+    // conventions: M = middle layer (between L/R), E = equatorial (between U/D), S = standing (between F/B)
+    case 'M': rotateSlice('x', 0, -dir); break; // sign chosen to match common notation (adjustable)
+    case 'E': rotateSlice('y', 0, dir); break;
+    case 'S': rotateSlice('z', 0, dir); break;
+  }
+}
+
+function isApostropheKey(e) {
+  // Accept common variants: U+0027 (') U+2019 (’) and legacy keyCode 222 (some layouts)
+  const k = e.key;
+  return k === "'" || k === '’' || e.keyCode === 222;
+}
+
+// --- Keyboard debug overlay (temporary, helps diagnose layout issues) ---
+let _keyDebugEl = null;
+function createKeyDebug() {
+  if (_keyDebugEl) return;
+  _keyDebugEl = document.createElement('div');
+  _keyDebugEl.style.cssText = 'position:fixed;left:8px;bottom:8px;padding:8px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px;border-radius:6px;z-index:9999;pointer-events:none;';
+  _keyDebugEl.textContent = '';
+  document.body.appendChild(_keyDebugEl);
+}
+function showKeyInfo(e) {
+  createKeyDebug();
+  const txt = `key:${String(e.key)} code:${e.code || 'n/a'} keyCode:${e.keyCode}`;
+  _keyDebugEl.textContent = txt;
+  _keyDebugEl.style.opacity = '1';
+  if (_keyDebugEl._timeout) clearTimeout(_keyDebugEl._timeout);
+  _keyDebugEl._timeout = setTimeout(() => { _keyDebugEl.style.opacity = '0'; }, 1500);
+}
+
+function startHold(letter, dir=1) {
+  const k = String(letter).toUpperCase();
+  if (activeHolds.has(k)) return;
+  const action = MOVE_KEYS.includes(k) ? () => doMove(k, dir) : () => doMiddleMove(k, dir);
+  action(); // immediate
+  const id = setInterval(action, HOLD_INTERVAL);
+  activeHolds.set(k, id);
+  _lastKey = { key: k, time: Date.now() };
+}
+
+function stopHold(letter) {
+  const k = String(letter || '').toUpperCase();
+  if (activeHolds.has(k)) {
+    clearInterval(activeHolds.get(k));
+    activeHolds.delete(k);
+  }
+}
+
+function clearAllHolds() {
+  for (const id of activeHolds.values()) clearInterval(id);
+  activeHolds.clear();
+}
+
+function onKeyDown(e) {
+  if (e.repeat) return;
+  showKeyInfo(e); // debug: show what the browser reports for this key
+
+  const k = e.key;
+  // apostrophe after a letter -> performs the inverse of the previous move
+  if (isApostropheKey(e)) {
+    if (_lastKey.key && (Date.now() - _lastKey.time) < PRIME_WINDOW) {
+      const letter = _lastKey.key.toUpperCase();
+      if (MOVE_KEYS.includes(letter)) { doMove(letter, -1); e.preventDefault(); _lastKey.key = null; return; }
+      if (MID_KEYS.includes(letter)) { doMiddleMove(letter, -1); e.preventDefault(); _lastKey.key = null; return; }
+    }
+    return;
+  }
+
+  const upper = k.toUpperCase();
+  if (MOVE_KEYS.includes(upper)) {
+    const dir = e.shiftKey ? -1 : 1; // Shift = prime
+    startHold(upper, dir);
+    e.preventDefault();
+  } else if (MID_KEYS.includes(upper)) {
+    const dir = e.shiftKey ? -1 : 1;
+    startHold(upper, dir);
+    e.preventDefault();
+  }
+}
+window.addEventListener('keydown', onKeyDown);
+window.addEventListener('keyup', (e) => stopHold(e.key));
+window.addEventListener('blur', () => clearAllHolds());
+window.addEventListener('visibilitychange', () => { if (document.hidden) clearAllHolds(); });
 
 // wire up buttons (keeps HTML clean of inline handlers)
 document.getElementById('btnU').addEventListener('click', () => doMove('U',1));
