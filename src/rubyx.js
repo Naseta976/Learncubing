@@ -306,7 +306,8 @@ export function createRubik(container, opts = {}) {
     if (e.repeat) return;
     const key = e.key.toUpperCase();
     const moves = ['U','R','F','D','L','B','M','E','S'];
-    
+
+    // Rétablir : touche seule = inverse (-1), Shift + touche = horaire (1)
     if (moves.includes(key)) {
       const dir = e.shiftKey ? 1 : -1;
       doMove(key, dir);
@@ -418,6 +419,64 @@ export function createRubik(container, opts = {}) {
   if (keyboardEnabled) addKeyboardListeners();
   if (touchEnabled) addPointerListeners();
 
+  // Compute preferred direction for a move so that "plain" (non-prime) buttons
+  // produce a clockwise rotation as seen on screen. Returns 1 or -1.
+  function computePreferredDir(move) {
+    try {
+      const mapping = { U: {axis:'y', index:1}, D:{axis:'y', index:-1}, R:{axis:'x', index:1}, L:{axis:'x', index:-1}, F:{axis:'z', index:1}, B:{axis:'z', index:-1} };
+      const m = (move||'').toUpperCase();
+      if (!mapping[m]) return 1;
+      const { axis, index } = mapping[m];
+
+      // world axis vector
+      const axisVec = axisVector(axis).clone();
+
+      // center of the face in world coordinates
+      const center = new THREE.Vector3();
+      if (axis === 'x') center.set(index * GAP, 0, 0);
+      else if (axis === 'y') center.set(0, index * GAP, 0);
+      else center.set(0, 0, index * GAP);
+
+      // pick a representative cubie on that face
+      const cubie = cubies.find(c => Math.round(c.userData.pos[axis]) === index);
+      if (!cubie) return 1;
+
+      // choose a point on the face slightly offset from center
+      const worldP = new THREE.Vector3();
+      cubie.getWorldPosition(worldP);
+      const offset = worldP.clone().sub(center);
+      if (offset.lengthSq() < 1e-6) offset.set(GAP*0.8, 0, 0);
+      offset.setLength(GAP * 0.8);
+      const pBefore = center.clone().add(offset);
+
+      // rotate the point by +90deg around the face axis in world space
+      const q = new THREE.Quaternion().setFromAxisAngle(axisVec, Math.PI/2);
+      const rel = pBefore.clone().sub(center).applyQuaternion(q);
+      const pAfter = center.clone().add(rel);
+
+      // project to screen
+      function worldToScreen(v) {
+        const v2 = v.clone().project(camera);
+        const rect = renderer.domElement.getBoundingClientRect();
+        return { x: (v2.x + 1) * 0.5 * rect.width, y: (1 - v2.y) * 0.5 * rect.height };
+      }
+
+      const cScreen = worldToScreen(center);
+      const bScreen = worldToScreen(pBefore);
+      const aScreen = worldToScreen(pAfter);
+
+      const vb = { x: bScreen.x - cScreen.x, y: bScreen.y - cScreen.y };
+      const va = { x: aScreen.x - cScreen.x, y: aScreen.y - cScreen.y };
+      const cross = vb.x * va.y - vb.y * va.x;
+
+      // On typical screen coords (y down) a negative cross indicates clockwise rotation.
+      const plusIsClockwise = cross < 0;
+      return plusIsClockwise ? 1 : -1;
+    } catch (err) {
+      return 1;
+    }
+  }
+
   // UI
   const uiWrap = document.createElement('div');
   uiWrap.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;padding:6px;background:rgba(0,0,0,0.35);border-radius:6px;color:#fff;font-size:12px;';
@@ -454,6 +513,13 @@ export function createRubik(container, opts = {}) {
   // Public API
   return {
     doMove,
+    // Perform move so that plain button corresponds to clockwise on screen
+    doRelativeMove(move, prime=false) {
+      // compute preferred base direction so a plain button produces a clockwise rotation on screen
+      const baseDir = computePreferredDir(move);
+      const dir = prime ? -baseDir : baseDir;
+      doMove(move, dir);
+    },
     setKeyboardEnabled,
     setTouchEnabled,
     scramble(times=20) {
@@ -470,6 +536,8 @@ export function createRubik(container, opts = {}) {
       cubies.length = 0;
       for (let x=-1;x<=1;x++) for (let y=-1;y<=1;y++) for (let z=-1;z<=1;z++) createCubie(x,y,z);
     },
-    destroy
+    destroy,
+    computePreferredDir
   };
 }
+
